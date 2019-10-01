@@ -1,12 +1,15 @@
 import React from 'react';
-import './App.css';
 
-function App() {
+import Layout from './components/Layout/Layout';
+import ReportForm from './containers/ReportForm/ReportForm';
+
+const App = () => {
   return (
-    <div className="App">
+    <Layout>
       <h1>Lucius Lite</h1>
       <p>Cree su reporte aquí</p>
-    </div>
+      <ReportForm />
+    </Layout>
   );
 }
 

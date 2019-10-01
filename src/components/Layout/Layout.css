@@ -1,0 +1,19 @@
+.Layout {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(245, 248, 248);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.FormsContainer {
+  background: #fff;
+  margin: 10%;
+  padding: 5%;
+  display: inline-block;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+}
