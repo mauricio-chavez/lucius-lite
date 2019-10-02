@@ -2,15 +2,23 @@ import React, { Component } from 'react';
 
 import PersonForm from '../../components/PersonForm/PersonForm';
 import LoginForm from '../../components/LoginForm/LoginForm';
+import PaymentForm from '../../components/PaymentForm/PaymentForm';
 
-class ReportForm extends Component {
+class ReportBuilder extends Component {
 
   state = {
-    status: 'notLoggedIn',
+    authenticated: false,
+    authenticationMethod: null,
     firstName: '',
     lastName: '',
     motherLastName: '',
-    rfc: ''
+    rfc: '',
+    guest: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+    },
   }
 
   handleValue = event => {
@@ -22,12 +30,37 @@ class ReportForm extends Component {
     });
   }
 
-  render(props) {
-    let bottomForm;
+  handleGuestFormValue = event => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState(prevState => {
+      const guestInfo = prevState.guest;
+      guestInfo[name] = value;
+      return {guest: guestInfo}
+    });
+  }
 
-    switch (this.state.status) {
-      default:
-        bottomForm = <LoginForm />;
+  authenticate = (event, method) => {
+    event.preventDefault();
+    this.setState({
+      authenticated: true,
+      authenticationMethod: method
+    });
+  };
+
+  render = props => {
+    let bottomForm;
+    if (this.state.authenticated) {
+      bottomForm = (
+        <PaymentForm
+          authenticationMethod={this.state.authenticationMethod}
+          guestData={this.state.guest}
+          valueHandler={this.handleGuestFormValue}
+        />
+      );
+    } else {
+      bottomForm = <LoginForm authenticator={this.authenticate} />;
     }
 
     return (
@@ -38,6 +71,7 @@ class ReportForm extends Component {
           motherLastName={this.state.motherLastName}
           rfc={this.state.rfc}
           valueHandler={this.handleValue}
+          authenticator={this.authenticate}
         />
         {bottomForm}
       </form>
@@ -45,4 +79,4 @@ class ReportForm extends Component {
   }
 }
 
-export default ReportForm;
+export default ReportBuilder;

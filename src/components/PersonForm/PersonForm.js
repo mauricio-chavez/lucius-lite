@@ -1,23 +1,23 @@
 import React from 'react';
 
-import FormInput from '../FormInput/FormInput';
+import TextInput from '../TextInput/TextInput';
 
 const PersonForm = props => (
   <>
     <p className="text-muted">Informacion de persona física o moral a investigar</p>
-    <FormInput
+    <TextInput
       valueKey="firstName" placeholder="Nombre *" type="text" required={true}
       autoFocus={true} valueHandler={props.valueHandler} value={props.firstName}
     />
-    <FormInput
+    <TextInput
       valueKey="lastName" placeholder="Apellido Paterno *" type="text"
       required={true} valueHandler={props.valueHandler} value={props.lastName}
     />
-    <FormInput
+    <TextInput
       valueKey="motherLastName" placeholder="Apellido Materno" type="text"
       valueHandler={props.valueHandler} value={props.motherLastName}
     />
-    <FormInput
+    <TextInput
       valueKey="rfc" placeholder="RFC (con o sin homoclave)" type="text"
       valueHandler={props.valueHandler} value={props.rfc}
     />
