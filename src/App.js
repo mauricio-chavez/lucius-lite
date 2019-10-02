@@ -1,14 +1,12 @@
 import React from 'react';
 
 import Layout from './components/Layout/Layout';
-import ReportForm from './containers/ReportForm/ReportForm';
+import ReportBuilder from './containers/ReportBuilder/ReportBuilder';
 
 const App = () => {
   return (
     <Layout>
-      <h1>Lucius Lite</h1>
-      <p>Cree su reporte aquí</p>
-      <ReportForm />
+      <ReportBuilder />
     </Layout>
   );
 }

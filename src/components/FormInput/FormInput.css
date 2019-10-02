@@ -1,0 +1,8 @@
+.FormInputGroup {
+  display: flex;
+  justify-content: center;
+}
+
+.FormInput {
+  max-width: 90%;
+}
