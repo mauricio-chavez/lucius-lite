@@ -9,7 +9,7 @@ const PaymentForm = props => {
       guestData={props.guestData}
       valueHandler={props.valueHandler}
     />
-  ) : <p className="text-danger">Bienvenido, Gabriel</p>;
+  ) : <p className="text-danger">Bienvenido, {props.displayName}</p>;
   return (
     <>
       {middleComponent}

@@ -2,12 +2,16 @@
   margin: 5px;
 }
 
-.facebook {
+.GoogleButton {
+  height: 3rem;
+}
+
+.Facebook {
   color: rgb(58, 102, 161);
   border-color: rgb(58, 102, 161);
 }
 
-.facebook:hover {
+.Facebook:hover {
   color: white;
   background: rgb(58, 102, 161);
   border-color: rgb(58, 102, 161);

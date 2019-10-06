@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import PersonForm from '../../components/PersonForm/PersonForm';
-import LoginForm from '../../components/LoginForm/LoginForm';
+import LoginForm from '../LoginForm/LoginForm';
 import PaymentForm from '../../components/PaymentForm/PaymentForm';
 
 class ReportBuilder extends Component {
@@ -19,6 +19,9 @@ class ReportBuilder extends Component {
       email: '',
       phone: '',
     },
+    displayName: '',
+    email: '',
+    phoneNumber: '',
   }
 
   handleValue = event => {
@@ -37,19 +40,43 @@ class ReportBuilder extends Component {
     this.setState(prevState => {
       const guestInfo = prevState.guest;
       guestInfo[name] = value;
-      return {guest: guestInfo}
+      return { guest: guestInfo }
     });
   }
 
-  authenticate = (event, method) => {
+  authenticate = async (event, authenticationMethod) => {
     event.preventDefault();
-    this.setState({
-      authenticated: true,
-      authenticationMethod: method
-    });
+    try {
+      if (authenticationMethod === 'google') {
+        const { displayName, email, phoneNumber } = await this.props.firebase.signInWithGoogle();
+        this.setState({
+          authenticated: true,
+          authenticationMethod,
+          displayName,
+          email,
+          phoneNumber,
+        });
+      } else if (authenticationMethod === 'facebook') {
+        const { displayName, email, phoneNumber } = await this.props.firebase.signInWithFacebook();
+        this.setState({
+          authenticated: true,
+          authenticationMethod,
+          displayName,
+          email,
+          phoneNumber,
+        });
+      } else if (authenticationMethod === 'guest') {
+        this.setState({
+          authenticated: true,
+          authenticationMethod,
+        });
+      }
+    } catch (e) {
+      alert(e);
+    }
   };
 
-  render = props => {
+  render = () => {
     let bottomForm;
     if (this.state.authenticated) {
       bottomForm = (
@@ -57,6 +84,7 @@ class ReportBuilder extends Component {
           authenticationMethod={this.state.authenticationMethod}
           guestData={this.state.guest}
           valueHandler={this.handleGuestFormValue}
+          displayName={this.state.displayName}
         />
       );
     } else {
