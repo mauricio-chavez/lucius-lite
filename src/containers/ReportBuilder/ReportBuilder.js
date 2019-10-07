@@ -93,11 +93,16 @@ class ReportBuilder extends Component {
           successAlert: 'Se ha iniciado sesión correctamente',
         });
       } else if (authenticationMethod === 'lucius') {
-        const { accessToken, refreshToken } = await signInWithLucius(this.state.email, this.state.password);
+        const {
+          accessToken, refreshToken, displayName, email, phoneNumber
+        } = await signInWithLucius(this.state.email, this.state.password);
         this.setState({
           accessToken,
           authenticated: true,
           authenticationMethod,
+          displayName,
+          email,
+          phoneNumber,
           refreshToken,
           successAlert: 'Se ha iniciado sesión correctamente',
         });
