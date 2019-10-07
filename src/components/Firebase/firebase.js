@@ -31,8 +31,12 @@ class Firebase {
           email: result.user.email,
           phoneNumber: result.user.phoneNumber,
         });
-      } catch (e) {
-        reject(`Ha ocurrido un error al autenticar`);
+      } catch (error) {
+        if (error.code === 'auth/popup-closed-by-user') {
+          reject('Ha ocurrido un error: El usuario ha cerrado la ventana emergente antes de finalizar la operación.');
+        } else {
+          reject(`Ha ocurrido un error al autenticar al usuario`);
+        }
       }
     });
   }
@@ -56,12 +60,10 @@ class Firebase {
             email: result.user.email,
             phoneNumber: result.user.phoneNumber,
           });
-          // reject(
-          //   'Ya existe una cuenta con el mismo correo electrónico '
-          //   + 'y diferentes credenciales. Inicia sesión usando el provedor asociado con este correo.'
-          // );
+        } else if (error.code === 'auth/popup-closed-by-user') {
+          reject('Ha ocurrido un error: El usuario ha cerrado la ventana emergente antes de finalizar la operación.');
         } else {
-          reject(`Ha ocurrido un error al auntenticar`);
+          reject(`Ha ocurrido un error al autenticar: ${error}`);
         }
       }
     });

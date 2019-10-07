@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
 import './LoginForm.css';
+
 import googleLoginButton from '../../assets/btn_google_signin_dark_normal_web@2x.png';
 import googleLoginButtonPressed from '../../assets/btn_google_signin_dark_pressed_web@2x.png';
 import facebookLogo from '../../assets/facebook.png';
 import whiteFacebookLogo from '../../assets/facebook-white.png';
+import luciusLogo from '../../assets/lucius-logo.png';
 
 const LoginForm = props => {
   const [facebookHover, setFacebookHover] = useState(facebookLogo);
@@ -35,13 +37,13 @@ const LoginForm = props => {
 
       </div>
       <div className="container d-flex justify-content-center">
-        <button type="button" className="LoginButton btn btn-outline-dark"
-          onClick={event => { props.authenticator(event, 'lucius') }}
+        <button type="button" className="LoginButton LuciusLogo btn btn-outline-dark"
+          onClick={event => { props.authMethodHandler(event, 'lucius') }}
         >
-          Lucius
-      </button>
+          <img src={luciusLogo} alt="Lucius Logo" height="20px" />
+        </button>
         <button type="button" className="LoginButton btn btn-outline-dark"
-          onClick={event => { props.authenticator(event, 'guest') }}
+          onClick={event => { props.authMethodHandler(event, 'guest') }}
         >
           Invitado
       </button>

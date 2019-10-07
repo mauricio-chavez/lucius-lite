@@ -1,30 +1,44 @@
 import React, { Component } from 'react';
 
-import PersonForm from '../../components/PersonForm/PersonForm';
+import GuestForm from '../../components/GuestForm/GuestForm';
 import LoginForm from '../LoginForm/LoginForm';
+import { signInWithLucius } from '../../components/LuciusAuth/LuciusAuth';
+import LuciusForm from '../../components/LuciusForm/LuciusForm';
 import PaymentForm from '../../components/PaymentForm/PaymentForm';
+import PersonForm from '../../components/PersonForm/PersonForm';
 
 class ReportBuilder extends Component {
 
   state = {
+    alert: null,
+    accessToken: '',
     authenticated: false,
     authenticationMethod: null,
-    firstName: '',
-    lastName: '',
-    motherLastName: '',
-    rfc: '',
-    guest: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-    },
     displayName: '',
     email: '',
+    firstName: '',
+    guest: {
+      email: '',
+      firstName: '',
+      lastName: '',
+      phone: '',
+    },
+    lastName: '',
+    motherLastName: '',
+    password: '',
     phoneNumber: '',
+    refreshToken: '',
+    rfc: '',
+    successAlert: null,
   }
 
   handleValue = event => {
+    if (this.state.successAlert) {
+      this.setState({ successAlert: null });
+    }
+    if (this.state.alert) {
+      this.setState({ alert: null });
+    }
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -34,6 +48,12 @@ class ReportBuilder extends Component {
   }
 
   handleGuestFormValue = event => {
+    if (this.state.successAlert) {
+      this.setState({ successAlert: null });
+    }
+    if (this.state.alert) {
+      this.setState({ alert: null });
+    }
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -42,6 +62,11 @@ class ReportBuilder extends Component {
       guestInfo[name] = value;
       return { guest: guestInfo }
     });
+  }
+
+  handleAuthenticationMethod = (event, authenticationMethod) => {
+    event.preventDefault();
+    this.setState({ authenticationMethod });
   }
 
   authenticate = async (event, authenticationMethod) => {
@@ -55,6 +80,7 @@ class ReportBuilder extends Component {
           displayName,
           email,
           phoneNumber,
+          successAlert: 'Se ha iniciado sesión correctamente',
         });
       } else if (authenticationMethod === 'facebook') {
         const { displayName, email, phoneNumber } = await this.props.firebase.signInWithFacebook();
@@ -64,22 +90,30 @@ class ReportBuilder extends Component {
           displayName,
           email,
           phoneNumber,
+          successAlert: 'Se ha iniciado sesión correctamente',
         });
-      } else if (authenticationMethod === 'guest') {
+      } else if (authenticationMethod === 'lucius') {
+        const { accessToken, refreshToken } = await signInWithLucius(this.state.email, this.state.password);
         this.setState({
+          accessToken,
           authenticated: true,
           authenticationMethod,
+          refreshToken,
+          successAlert: 'Se ha iniciado sesión correctamente',
         });
       }
     } catch (e) {
-      alert(e);
+      this.setState({
+        alert: e
+      });
     }
   };
 
   render = () => {
-    let bottomForm;
-    if (this.state.authenticated) {
-      bottomForm = (
+    let middleComponent;
+    let bottomComponent;
+    if (this.state.authenticationMethod) {
+      bottomComponent = (
         <PaymentForm
           authenticationMethod={this.state.authenticationMethod}
           guestData={this.state.guest}
@@ -88,11 +122,48 @@ class ReportBuilder extends Component {
         />
       );
     } else {
-      bottomForm = <LoginForm authenticator={this.authenticate} />;
+      bottomComponent = (
+        <LoginForm
+          authenticator={this.authenticate}
+          authMethodHandler={this.handleAuthenticationMethod}
+        />
+      );
+    }
+
+    if (!this.state.authenticationMethod) {
+      middleComponent = null;
+    } else if (this.state.authenticationMethod === 'lucius' && !this.state.authenticated) {
+      middleComponent = (
+        <LuciusForm
+          email={this.state.email}
+          password={this.state.password}
+          valueHandler={this.handleValue}
+          authenticator={(event) => { this.authenticate(event, 'lucius') }}
+        />
+      );
+    } else if (this.state.authenticationMethod === 'guest') {
+      middleComponent = (
+        <GuestForm
+          guestData={this.state.guest}
+          valueHandler={this.handleGuestFormValue}
+        />
+      );
+    } else {
+      middleComponent = <p className="text-danger">Bienvenido, {this.state.displayName}</p>;
     }
 
     return (
       <form>
+        {(this.state.successAlert) ? (
+          <div className="alert alert-success" role="alert">
+            {this.state.successAlert}
+          </div>
+        ) : null}
+        {(this.state.alert) ? (
+          <div className="alert alert-danger" role="alert">
+            {this.state.alert}
+          </div>
+        ) : null}
         <PersonForm
           firstName={this.state.firstName}
           lastName={this.state.lastName}
@@ -101,7 +172,8 @@ class ReportBuilder extends Component {
           valueHandler={this.handleValue}
           authenticator={this.authenticate}
         />
-        {bottomForm}
+        {middleComponent}
+        {bottomComponent}
       </form>
     );
   }

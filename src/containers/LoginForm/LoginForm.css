@@ -16,3 +16,7 @@
   background: rgb(58, 102, 161);
   border-color: rgb(58, 102, 161);
 }
+
+.LuciusLogo:hover {
+  background: gainsboro;
+}

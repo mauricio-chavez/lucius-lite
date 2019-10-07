@@ -1,18 +1,10 @@
 import React from 'react';
 
-import GuestForm from '../GuestForm/GuestForm';
 import './PaymentMethod.css';
 
 const PaymentForm = props => {
-  const middleComponent = (props.authenticationMethod === 'guest') ? (
-    <GuestForm
-      guestData={props.guestData}
-      valueHandler={props.valueHandler}
-    />
-  ) : <p className="text-danger">Bienvenido, {props.displayName}</p>;
   return (
     <>
-      {middleComponent}
       <p className="text-muted">Información de Pago</p>
       <div className="container d-flex justify-content-center">
         <div className="form-check payment">
