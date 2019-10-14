@@ -1,0 +1,12 @@
+.PaymentButton {
+  margin: 5px;
+}
+
+.PaymentButton:hover {
+  background: gainsboro;
+  color: black;
+}
+
+.CardSpan {
+  margin-right: 5px;
+}

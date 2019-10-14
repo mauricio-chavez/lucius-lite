@@ -1,0 +1,15 @@
+.FinalScreenInfo {
+  line-height: 20px;
+}
+
+.FinalScreenInfo > p,h2 {
+  margin: 0;
+}
+
+.FinalLuciusLogo {
+  margin: 50px 0 150px;
+}
+
+.FinalLoading {
+  margin: 50px 0;
+}
