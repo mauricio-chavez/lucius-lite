@@ -154,7 +154,7 @@ class ReportBuilder extends Component {
   render = () => {
     let middleComponent;
     let bottomComponent;
-    if (this.state.authenticationMethod) {
+    if (this.state.authenticationMethod && this.state.authenticated) {
       bottomComponent = (
         <PaymentForm
           authenticationMethod={this.state.authenticationMethod}
@@ -171,13 +171,15 @@ class ReportBuilder extends Component {
           isPaid={this.state.isPaid}
         />
       );
-    } else {
+    } else if (!this.state.authenticationMethod && !this.state.authenticated) {
       bottomComponent = (
         <LoginForm
           authenticator={this.authenticate}
           authMethodHandler={this.handleAuthenticationMethod}
         />
       );
+    } else {
+      bottomComponent = null;
     }
 
     if (!this.state.authenticationMethod) {
