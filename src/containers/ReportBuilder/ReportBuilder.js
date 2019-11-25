@@ -154,7 +154,7 @@ class ReportBuilder extends Component {
   render = () => {
     let middleComponent;
     let bottomComponent;
-    if (this.state.authenticationMethod && this.state.authenticated) {
+    if ((this.state.authenticationMethod && this.state.authenticated) || this.state.authenticationMethod === 'guest') {
       bottomComponent = (
         <PaymentForm
           authenticationMethod={this.state.authenticationMethod}
@@ -208,7 +208,7 @@ class ReportBuilder extends Component {
 
     if (!this.state.finished) {
       return (
-        <form>
+        <>
           {(this.state.successAlert) ? (
             <div className="alert alert-success" role="alert">
               {this.state.successAlert}
@@ -229,7 +229,7 @@ class ReportBuilder extends Component {
           />
           {middleComponent}
           {bottomComponent}
-        </form>
+        </>
       );
     } else {
       return <FinalScreen />
